@@ -318,6 +318,10 @@
         <translation>名单已清空。</translation>
     </message>
     <message>
+        <source>LIST_EDITED</source>
+        <translation>名单已更新。</translation>
+    </message>
+    <message>
         <source>EDIT_LIST</source>
         <translation>1. 编辑名单 (</translation>
     </message>
@@ -394,6 +398,10 @@
         <translation>执行系统命令</translation>
     </message>
     <message>
+        <source>TUI_HELP_OP</source>
+        <translation>用&apos;&amp;&amp;&apos;、&apos;||&apos;、&apos;;&apos;串联命令</translation>
+    </message>
+    <message>
         <source>TUI_HELP_ABOUT</source>
         <translation>显示关于</translation>
     </message>
@@ -448,6 +456,10 @@
     <message>
         <source>SETUP_HINT_ADD</source>
         <translation>输入&apos;add &lt;name&gt;&apos;添加，&apos;clear&apos;清空，&apos;back&apos;返回</translation>
+    </message>
+    <message>
+        <source>SETUP_HINT_EDIT</source>
+        <translation>输入&apos;edit &lt;id&gt; &lt;name&gt;&apos;编辑</translation>
     </message>
     <message>
         <source>SETUP_LIST_EDIT</source>

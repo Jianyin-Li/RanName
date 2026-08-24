@@ -133,15 +133,18 @@ void SetupTUI::showListScreen(const std::vector<std::string>& names,
         drawContentRow(r, "");
     }
 
-    std::string hint = i18n::Localizer::get(i18n::ID::SETUP_HINT_ADD);
-    drawContentRow(7, "  " + hint);
+    std::string hintAdd = i18n::Localizer::get(i18n::ID::SETUP_HINT_ADD);
+    drawContentRow(7, "  " + hintAdd);
+
+    std::string hintEdit = i18n::Localizer::get(i18n::ID::SETUP_HINT_EDIT);
+    drawContentRow(8, "  " + hintEdit);
 
     std::string status = statusMsg.empty()
         ? i18n::Localizer::get(i18n::ID::PRESS_ENTER)
         : statusMsg;
-    drawContentRow(8, "  " + status);
+    drawContentRow(9, "  " + status);
 
-    frameBottomRow = 9;
+    frameBottomRow = 10;
     drawBottomBorder(frameBottomRow);
 
     std::cout << std::flush;

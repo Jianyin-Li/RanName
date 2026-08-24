@@ -17,6 +17,7 @@ namespace data {
         std::string getNameAt(size_t index) const;
         const std::vector<std::string>& getNames() const;
         void addName(const std::string& name);
+        bool setNameAt(size_t index, const std::string& name);
         void clear();
     };
 }

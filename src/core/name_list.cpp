@@ -47,6 +47,12 @@ namespace data {
         names.push_back(name);
     }
 
+    bool NameList::setNameAt(size_t index, const std::string& name) {
+        if (index >= names.size()) return false;
+        names[index] = name;
+        return true;
+    }
+
     void NameList::clear() {
         names.clear();
     }

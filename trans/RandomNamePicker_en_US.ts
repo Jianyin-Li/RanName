@@ -334,6 +334,10 @@
         <translation>List cleared.</translation>
     </message>
     <message>
+        <source>LIST_EDITED</source>
+        <translation>List updated.</translation>
+    </message>
+    <message>
         <source>EDIT_LIST</source>
         <translation>1. Edit list (</translation>
     </message>
@@ -410,6 +414,10 @@
         <translation>Run a system command</translation>
     </message>
     <message>
+        <source>TUI_HELP_OP</source>
+        <translation>Chain commands with &apos;&amp;&amp;&apos; &apos;||&apos; &apos;;&apos;</translation>
+    </message>
+    <message>
         <source>TUI_HELP_ABOUT</source>
         <translation>Show about</translation>
     </message>
@@ -464,6 +472,10 @@
     <message>
         <source>SETUP_HINT_ADD</source>
         <translation>Type &apos;add &lt;name&gt;&apos; to add, &apos;clear&apos; to clear, &apos;back&apos; to return</translation>
+    </message>
+    <message>
+        <source>SETUP_HINT_EDIT</source>
+        <translation>Type &apos;edit &lt;id&gt; &lt;name&gt;&apos; to edit</translation>
     </message>
     <message>
         <source>SETUP_LIST_EDIT</source>

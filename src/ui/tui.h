@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 #include <ctime>
 
 namespace ui {
@@ -34,7 +35,7 @@ public:
     void showHelpScreen();
     void showAboutScreen();
 
-    TUIAction getAction();
+    std::vector<TUIAction> getAction();
     const std::string& getLangArg() const;
 
 private:
@@ -55,7 +56,8 @@ private:
     std::string readCommand();
     std::string tabComplete(const std::string& input);
 
-    TUIAction parseCommand(const std::string& cmd);
+    std::pair<bool, TUIAction> parseCommand(const std::string& cmd);
+    bool runExternal(const std::string& cmdLine);
     std::string centerText(const std::string& text, int w);
     std::string fitWidth(const std::string& text, int w);
     int displayWidth(const std::string& text);

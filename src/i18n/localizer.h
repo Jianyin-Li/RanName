@@ -36,6 +36,7 @@ enum class ID {
     PLEASE_CHOOSE,
     ENTER_NAME,
     LIST_CLEARED,
+    LIST_EDITED,
     EDIT_LIST,
     SET_MODE,
     SAVE_EXIT,
@@ -55,6 +56,7 @@ enum class ID {
     TUI_HELP_HELP,
     TUI_HELP_BACK,
     TUI_HELP_SHELL,
+    TUI_HELP_OP,
     TUI_HELP_ABOUT,
     ABOUT_TITLE,
     ABOUT_PROJECT,
@@ -69,6 +71,7 @@ enum class ID {
     SETUP_HINT_LIST,
     SETUP_HINT_SAVE,
     SETUP_HINT_ADD,
+    SETUP_HINT_EDIT,
     SETUP_LIST_EDIT,
     _COUNT
 };

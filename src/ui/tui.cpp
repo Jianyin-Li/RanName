@@ -71,6 +71,32 @@ void removeAt(std::string& s, size_t cur) {
     s.erase(cur, end - cur);
 }
 
+// Split a shell-like command line on &&, ||, ; (no quote handling).
+std::vector<std::string> splitShell(const std::string& line) {
+    std::vector<std::string> tokens;
+    std::string cur;
+    for (size_t i = 0; i < line.size(); ) {
+        if (line[i] == '&' && i + 1 < line.size() && line[i + 1] == '&') {
+            if (!cur.empty()) { tokens.push_back(cur); cur.clear(); }
+            tokens.push_back("&&");
+            i += 2;
+        } else if (line[i] == '|' && i + 1 < line.size() && line[i + 1] == '|') {
+            if (!cur.empty()) { tokens.push_back(cur); cur.clear(); }
+            tokens.push_back("||");
+            i += 2;
+        } else if (line[i] == ';') {
+            if (!cur.empty()) { tokens.push_back(cur); cur.clear(); }
+            tokens.push_back(";");
+            i += 1;
+        } else {
+            cur += line[i];
+            i += 1;
+        }
+    }
+    if (!cur.empty()) tokens.push_back(cur);
+    return tokens;
+}
+
 }  // namespace
 
 TUI::TUI()
@@ -333,21 +359,22 @@ void TUI::showHelpScreen() {
     std::cout << RIGHT_MID << C_RESET;
 
     drawHelpLine("next / n", i18n::Localizer::get(i18n::ID::TUI_HELP_NEXT), 4);
-    drawHelpLine("hide / h", i18n::Localizer::get(i18n::ID::TUI_HELP_HIDE), 5);
+    drawHelpLine("hide", i18n::Localizer::get(i18n::ID::TUI_HELP_HIDE), 5);
     drawHelpLine("all / one", i18n::Localizer::get(i18n::ID::TUI_HELP_MODE), 6);
     drawHelpLine("lang / language [code]", i18n::Localizer::get(i18n::ID::TUI_HELP_LANG), 7);
-    drawHelpLine("restart / r", i18n::Localizer::get(i18n::ID::TUI_HELP_RESTART), 8);
-    drawHelpLine("setup / s", i18n::Localizer::get(i18n::ID::TUI_HELP_SETUP), 9);
+    drawHelpLine("restart", i18n::Localizer::get(i18n::ID::TUI_HELP_RESTART), 8);
+    drawHelpLine("setup", i18n::Localizer::get(i18n::ID::TUI_HELP_SETUP), 9);
     drawHelpLine("quit / q", i18n::Localizer::get(i18n::ID::TUI_HELP_QUIT), 10);
     drawHelpLine("help / ?", i18n::Localizer::get(i18n::ID::TUI_HELP_HELP), 11);
     drawHelpLine("! <cmd>", i18n::Localizer::get(i18n::ID::TUI_HELP_SHELL), 12);
-    drawHelpLine("about / a", i18n::Localizer::get(i18n::ID::TUI_HELP_ABOUT), 13);
+    drawHelpLine("about", i18n::Localizer::get(i18n::ID::TUI_HELP_ABOUT), 13);
+    drawHelpLine("&& / || / ;", i18n::Localizer::get(i18n::ID::TUI_HELP_OP), 14);
 
-    std::cout << C_BORDER << "\033[14;1H" << BOT_LEFT;
+    std::cout << C_BORDER << "\033[15;1H" << BOT_LEFT;
     for (int i = 0; i < width; i++) std::cout << HORIZ;
     std::cout << BOT_RIGHT << C_RESET;
 
-    frameBottomRow = 14;
+    frameBottomRow = 15;
 
     // Wait for the user to dismiss, otherwise the pick screen redraws over it
     int r = frameBottomRow + 2;
@@ -583,54 +610,83 @@ std::string TUI::tabComplete(const std::string& input) {
     return best.empty() ? input : best;
 }
 
-TUIAction TUI::parseCommand(const std::string& cmd) {
+std::pair<bool, TUIAction> TUI::parseCommand(const std::string& cmd) {
     std::string input = cmd;
     input.erase(0, input.find_first_not_of(" \t"));
     input.erase(input.find_last_not_of(" \t") + 1);
     std::transform(input.begin(), input.end(), input.begin(), ::tolower);
 
-    if (input.empty()) return TUIAction::NONE;
+    if (input.empty()) return {true, TUIAction::NONE};
 
-    if (input == "next" || input == "n") return TUIAction::NEXT;
-    if (input == "quit" || input == "q" || input == "exit") return TUIAction::QUIT;
-    if (input == "hide" || input == "h") return TUIAction::HIDE;
-    if (input == "all" || input == "mode all" || input == "mode_all") return TUIAction::MODE_ALL;
-    if (input == "one" || input == "mode one" || input == "mode_one" || input == "mode one by one") return TUIAction::MODE_ONE;
-    if (input == "lang" || input == "language" || input == "l") {
+    if (input == "next" || input == "n") return {true, TUIAction::NEXT};
+    if (input == "quit" || input == "q" || input == "exit") return {true, TUIAction::QUIT};
+    if (input == "hide") return {true, TUIAction::HIDE};
+    if (input == "all" || input == "mode all" || input == "mode_all") return {true, TUIAction::MODE_ALL};
+    if (input == "one" || input == "mode one" || input == "mode_one") return {true, TUIAction::MODE_ONE};
+    if (input == "lang" || input == "language") {
         lastLangArg.clear();
-        return TUIAction::LANG;
+        return {true, TUIAction::LANG};
     }
-    if (input.rfind("lang ", 0) == 0 || input.rfind("language ", 0) == 0
-        || input.rfind("l ", 0) == 0) {
+    if (input.rfind("lang ", 0) == 0 || input.rfind("language ", 0) == 0) {
         size_t sp = input.find(' ');
         lastLangArg = input.substr(sp + 1);
         lastLangArg.erase(0, lastLangArg.find_first_not_of(" \t"));
         lastLangArg.erase(lastLangArg.find_last_not_of(" \t") + 1);
-        return TUIAction::LANG;
+        return {true, TUIAction::LANG};
     }
-    if (input == "restart" || input == "r") return TUIAction::RESTART;
-    if (input == "setup" || input == "config" || input == "settings" || input == "s") return TUIAction::SETUP;
-    if (input == "help" || input == "?") return TUIAction::HELP;
-    if (input == "about" || input == "a") return TUIAction::ABOUT;
+    if (input == "restart") return {true, TUIAction::RESTART};
+    if (input == "setup" || input == "config" || input == "settings") return {true, TUIAction::SETUP};
+    if (input == "help" || input == "?") return {true, TUIAction::HELP};
+    if (input == "about") return {true, TUIAction::ABOUT};
 
     lastStatus = "Unknown: " + cmd + ". Type 'help' for commands.";
-    return TUIAction::NONE;
+    return {false, TUIAction::NONE};
 }
 
-TUIAction TUI::getAction() {
+bool TUI::runExternal(const std::string& cmdLine) {
+    ansiClearScreen();
+    std::string cmd = cmdLine.substr(1);
+    std::cout << C_TITLE << "$ " << cmd << C_RESET << std::endl;
+    int rc = std::system(cmd.c_str());
+    std::cout << C_STATUS << "[exit " << rc << "]" << C_RESET << std::endl;
+    utils::Platform::sleep(400);
+    drawn = false;
+    return rc == 0;
+}
+
+std::vector<TUIAction> TUI::getAction() {
+    std::vector<TUIAction> actions;
     std::string line = readCommand();
-    if (!line.empty() && line[0] == '!') {
-        // Run an external shell command (e.g. !dir, !cls)
-        ansiClearScreen();
-        std::string cmd = line.substr(1);
-        std::cout << C_TITLE << "$ " << cmd << C_RESET << std::endl;
-        int rc = std::system(cmd.c_str());
-        std::cout << C_STATUS << "[exit " << rc << "]" << C_RESET << std::endl;
-        utils::Platform::sleep(400);
-        drawn = false;
-        return TUIAction::NONE;
+    if (line.empty()) return actions;
+
+    auto tokens = splitShell(line);
+    bool chainOk = true;
+    bool needTrue = true;
+    for (const auto& tok : tokens) {
+        if (tok == "&&") { needTrue = chainOk; continue; }
+        if (tok == "||") { needTrue = !chainOk; continue; }
+        if (tok == ";")  { chainOk = true; needTrue = true; continue; }
+
+        bool success = false;
+        if (needTrue) {
+            std::string t = tok;
+            t.erase(0, t.find_first_not_of(" \t"));
+            if (!t.empty() && t[0] == '!') {
+                success = runExternal(t);
+            } else {
+                auto pr = parseCommand(t);
+                success = pr.first;
+                TUIAction a = pr.second;
+                if (a == TUIAction::QUIT) {
+                    actions.push_back(TUIAction::QUIT);
+                    return actions;
+                }
+                if (a != TUIAction::NONE) actions.push_back(a);
+            }
+        }
+        chainOk = success;
     }
-    return parseCommand(line);
+    return actions;
 }
 
 }
