@@ -24,7 +24,7 @@ private slots:
     void onNextButtonClicked();
     void onTimerTimeout();
     void onExitActionTriggered();
-    void onHideNextActionTriggered();
+    void onShowNextPreviewActionTriggered();
     void onAllRandomActionTriggered();
     void onOneByOneActionTriggered();
     void onRestartActionTriggered();
@@ -50,7 +50,7 @@ private:
     std::vector<std::string> names;
     std::vector<size_t> randomIndices;
     size_t currentIndex;
-    bool hideNextPerson;
+    bool showNextPreview;
     bool allDone;
     int pickMode;
     QTimer *timer;

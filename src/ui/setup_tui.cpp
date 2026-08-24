@@ -1,5 +1,6 @@
 #include "setup_tui.h"
 #include "../utils/platform.h"
+#include "../utils/display_util.h"
 #include "../i18n/localizer.h"
 #include <iostream>
 #include <sstream>
@@ -13,6 +14,16 @@ static const char* BOT_LEFT     = "\xe2\x95\x9a";
 static const char* BOT_RIGHT    = "\xe2\x95\x9d";
 static const char* HORIZ        = "\xe2\x95\x90";
 static const char* VERT         = "\xe2\x95\x91";
+
+// ANSI color theme (matches the main TUI and GUI's purple-blue gradient)
+static const char* C_RESET  = "\033[0m";
+static const char* C_BORDER = "\033[96m";
+static const char* C_TITLE  = "\033[1;97m";
+static const char* C_MODE   = "\033[33m";
+static const char* C_TEXT   = "\033[37m";
+static const char* C_PREV   = "\033[2;37m";
+static const char* C_STATUS = "\033[93m";
+static const char* C_PROMPT = "\033[1;92m";
 
 SetupTUI::SetupTUI()
     : width(78)
@@ -33,30 +44,30 @@ void SetupTUI::clearScreen() {
 }
 
 void SetupTUI::drawTopBorder() {
-    std::cout << "\033[1;1H" << TOP_LEFT;
+    std::cout << "\033[1;1H" << C_BORDER << TOP_LEFT;
     for (int i = 0; i < width; i++) std::cout << HORIZ;
-    std::cout << TOP_RIGHT;
+    std::cout << TOP_RIGHT << C_RESET;
 }
 
 void SetupTUI::drawBottomBorder(int row) {
-    std::cout << "\033[" << row << ";1H" << BOT_LEFT;
+    std::cout << "\033[" << row << ";1H" << C_BORDER << BOT_LEFT;
     for (int i = 0; i < width; i++) std::cout << HORIZ;
-    std::cout << BOT_RIGHT;
+    std::cout << BOT_RIGHT << C_RESET;
 }
 
 void SetupTUI::drawContentRow(int row, const std::string& text) {
-    std::cout << "\033[" << row << ";1H" << VERT;
-    std::string content = text;
-    if ((int)content.size() > width) content = content.substr(0, width);
-    std::cout << content;
-    int pad = width - (int)content.size();
+    std::cout << "\033[" << row << ";1H" << C_BORDER << VERT << C_RESET;
+    std::string content = display::fitWidth(text, width);
+    std::cout << C_TEXT << content << C_RESET;
+    int pad = width - display::displayWidth(content);
+    if (pad < 0) pad = 0;
     for (int i = 0; i < pad; i++) std::cout << " ";
-    std::cout << VERT;
+    std::cout << C_BORDER << VERT << C_RESET;
 }
 
 void SetupTUI::drawPrompt() {
     int r = frameBottomRow + 2;
-    std::cout << "\033[" << r << ";1H\033[K> " << std::flush;
+    std::cout << "\033[" << r << ";1H\033[K" << C_PROMPT << "> " << C_RESET << std::flush;
 }
 
 void SetupTUI::showMainScreen(const std::string& modeDesc, size_t nameCount,
@@ -65,10 +76,10 @@ void SetupTUI::showMainScreen(const std::string& modeDesc, size_t nameCount,
     drawTopBorder();
 
     std::string title = i18n::Localizer::get(i18n::ID::TITLE_CONFIG);
-    std::string header = "  " + title;
-    int pad = width - 2 - (int)title.size() - (int)modeDesc.size() - 4;
+    int avail = width - 2;
+    int pad = avail - display::displayWidth(title) - display::displayWidth(modeDesc) - 6;
     if (pad < 1) pad = 1;
-    header += std::string(pad, ' ') + "  " + modeDesc;
+    std::string header = "  " + title + std::string(pad, ' ') + "  " + modeDesc;
     drawContentRow(2, header);
 
     std::string countStr = i18n::Localizer::get(i18n::ID::NAME_COUNT)

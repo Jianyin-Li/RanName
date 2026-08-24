@@ -88,6 +88,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Next person preview shown.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next person preview hidden.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Mode changed to All Random</source>
         <translation type="unfinished"></translation>
     </message>
@@ -167,6 +175,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Show Next Person Preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>All Random</source>
         <translation type="unfinished"></translation>
     </message>
@@ -227,7 +239,7 @@
     </message>
     <message>
         <source>PERSON_UNIT</source>
-        <translation></translation>
+        <translation> people</translation>
     </message>
     <message>
         <source>INVALID_INPUT</source>
@@ -354,6 +366,70 @@
         <translation>Commands: next(n) quit(q) hide(h) all one lang(l) restart(r) help(?)</translation>
     </message>
     <message>
+        <source>TUI_HELP_TITLE</source>
+        <translation>Help</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_NEXT</source>
+        <translation>Next person</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_HIDE</source>
+        <translation>Show / Hide next name</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_MODE</source>
+        <translation>Switch mode (all / one)</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_LANG</source>
+        <translation>Switch language (lang zh / lang en)</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_RESTART</source>
+        <translation>Restart picking</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_SETUP</source>
+        <translation>Open configuration</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_QUIT</source>
+        <translation>Quit program</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_HELP</source>
+        <translation>Show this help</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_BACK</source>
+        <translation>Press Enter to return...</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_SHELL</source>
+        <translation>Run a system command</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_ABOUT</source>
+        <translation>Show about</translation>
+    </message>
+    <message>
+        <source>ABOUT_TITLE</source>
+        <translation>About</translation>
+    </message>
+    <message>
+        <source>ABOUT_PROJECT</source>
+        <translation>RandomNamePicker v</translation>
+    </message>
+    <message>
+        <source>ABOUT_DESC</source>
+        <translation>A random name picker for classrooms.</translation>
+    </message>
+    <message>
+        <source>ABOUT_AUTHOR</source>
+        <translation>Copyright © 2025 Jianyin Li</translation>
+    </message>
+    <message>
         <source>TUI_DONE</source>
         <translation>All names picked!</translation>
     </message>
@@ -383,7 +459,7 @@
     </message>
     <message>
         <source>SETUP_HINT_SAVE</source>
-        <translation>Type &apos;mode&apos; to change mode, &apos;save&apos; to save &amp; exit, &apos;exit&apos; to quit</translation>
+        <translation>Type &apos;save&apos; to save &amp; exit, &apos;exit&apos; to quit</translation>
     </message>
     <message>
         <source>SETUP_HINT_ADD</source>

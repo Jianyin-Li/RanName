@@ -1,4 +1,6 @@
 #include <QApplication>
+#include <QTranslator>
+#include <QFileInfo>
 #include "main_window.h"
 #include "../core/config_manager.h"
 #include "../i18n/localizer.h"
@@ -27,6 +29,15 @@ int main(int argc, char *argv[])
     }
 
     i18n::Localizer::setLanguage(langStr);
+
+    // Load Qt UI translation (.qm embedded via resources.qrc) based on --lang or config.
+    // Without this, QCoreApplication::translate()/tr() always falls back to the source text (English).
+    QTranslator qtTranslator;
+    const QString qmPath = QStringLiteral(":/i18n/RandomNamePicker_%1.qm")
+                               .arg(QString::fromStdString(langStr));
+    if (QFileInfo::exists(qmPath) && qtTranslator.load(qmPath)) {
+        app.installTranslator(&qtTranslator);
+    }
 
     MainWindow window;
     window.show();

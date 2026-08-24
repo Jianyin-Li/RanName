@@ -105,7 +105,8 @@ list(LENGTH GUI_SOURCES GUI_COUNT)
 list(LENGTH HEADERS HEADERS_COUNT)
 
 # Console application
-add_executable(RandomNamePicker ${CONSOLE_SOURCES})
+add_executable(RandomNamePicker ${CONSOLE_SOURCES}
+    src/utils/display_util.h)
 set_target_properties(RandomNamePicker PROPERTIES
     OUTPUT_NAME "RandomNamePicker"
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
@@ -113,11 +114,37 @@ set_target_properties(RandomNamePicker PROPERTIES
 
 target_include_directories(RandomNamePicker PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
+target_compile_definitions(RandomNamePicker PRIVATE APP_VERSION="${PROJECT_VERSION}")
+
+# --- i18n: auto-generate .qm from .ts (.qm files are NOT tracked in git) ---
+find_program(LRELEASE_EXECUTABLE NAMES lrelease lrelease-qt6)
+set(TRANSLATION_TS_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/trans/RandomNamePicker_en_US.ts
+    ${CMAKE_CURRENT_SOURCE_DIR}/trans/RandomNamePicker_zh_CN.ts
+)
+set(GENERATED_QM_FILES)
+if(LRELEASE_EXECUTABLE)
+    foreach(TS_FILE IN LISTS TRANSLATION_TS_FILES)
+        get_filename_component(TS_NAME "${TS_FILE}" NAME_WE)
+        set(QM_FILE "${CMAKE_CURRENT_SOURCE_DIR}/trans/${TS_NAME}.qm")
+        add_custom_command(
+            OUTPUT "${QM_FILE}"
+            COMMAND "${LRELEASE_EXECUTABLE}" "${TS_FILE}" -qm "${QM_FILE}"
+            DEPENDS "${TS_FILE}"
+            COMMENT "lrelease: generating ${TS_NAME}.qm"
+        )
+        list(APPEND GENERATED_QM_FILES "${QM_FILE}")
+    endforeach()
+else()
+    message(WARNING "lrelease not found - translation .qm files will not be generated automatically")
+endif()
+
 # GUI application (requires Qt6)
 find_package(Qt6 QUIET COMPONENTS Core Widgets Gui)
 if(Qt6_FOUND)
     add_executable(RandomNamePickerGUI
         ${GUI_SOURCES}
+        ${GENERATED_QM_FILES}
         ${CMAKE_CURRENT_SOURCE_DIR}/src/i18n/localizer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/core/config_manager.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/core/name_list.cpp

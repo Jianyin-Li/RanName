@@ -23,7 +23,7 @@ class Ui_mainWindow
 {
 public:
     QAction *actionExit;
-    QAction *action_hidenp;
+    QAction *action_nextprev;
     QAction *action_m_all;
     QAction *action_per;
     QAction *action_restart;
@@ -62,8 +62,10 @@ public:
         actionExit = new QAction(mainWindow);
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
 
-        action_hidenp = new QAction(mainWindow);
-        action_hidenp->setObjectName(QString::fromUtf8("action_hidenp"));
+        action_nextprev = new QAction(mainWindow);
+        action_nextprev->setObjectName(QString::fromUtf8("action_nextprev"));
+        action_nextprev->setCheckable(true);
+        action_nextprev->setChecked(true);
 
         action_m_all = new QAction(mainWindow);
         action_m_all->setObjectName(QString::fromUtf8("action_m_all"));
@@ -203,7 +205,7 @@ public:
         menu_mode->addAction(action_m_all);
         menu_mode->addAction(action_per);
 
-        menu_view->addAction(action_hidenp);
+        menu_view->addAction(action_nextprev);
 
         menu_lang->addAction(action_lang_en);
         menu_lang->addAction(action_lang_zh);
@@ -228,7 +230,7 @@ public:
         menu_lang->setTitle(QCoreApplication::translate("mainWindow", "Language", nullptr));
         menu_about->setTitle(QCoreApplication::translate("mainWindow", "About", nullptr));
         actionExit->setText(QCoreApplication::translate("mainWindow", "Exit", nullptr));
-        action_hidenp->setText(QCoreApplication::translate("mainWindow", "Hide Next Person", nullptr));
+        action_nextprev->setText(QCoreApplication::translate("mainWindow", "Show Next Person Preview", nullptr));
         action_m_all->setText(QCoreApplication::translate("mainWindow", "All Random", nullptr));
         action_per->setText(QCoreApplication::translate("mainWindow", "One by One", nullptr));
         action_restart->setText(QCoreApplication::translate("mainWindow", "Restart", nullptr));

@@ -83,6 +83,10 @@ public:
                     break;
                 } else if (action == ui::TUIAction::QUIT) {
                     return;
+                } else if (action == ui::TUIAction::HELP) {
+                    tui.showHelpScreen();
+                } else if (action == ui::TUIAction::ABOUT) {
+                    tui.showAboutScreen();
                 } else if (action == ui::TUIAction::HIDE) {
                     hideNext = !hideNext;
                 } else if (action == ui::TUIAction::MODE_ALL) {
@@ -107,9 +111,15 @@ public:
                     handleSetup();
                     continue;
                 } else if (action == ui::TUIAction::LANG) {
-                    i18n::Language cur = i18n::Localizer::getLanguage();
-                    i18n::Language next = (cur == i18n::Language::ZH_CN)
-                        ? i18n::Language::EN_US : i18n::Language::ZH_CN;
+                    std::string langArg = tui.getLangArg();
+                    i18n::Language next;
+                    if (!langArg.empty()) {
+                        next = i18n::Localizer::parseLanguage(langArg);
+                    } else {
+                        i18n::Language cur = i18n::Localizer::getLanguage();
+                        next = (cur == i18n::Language::ZH_CN)
+                            ? i18n::Language::EN_US : i18n::Language::ZH_CN;
+                    }
                     i18n::Localizer::setLanguage(i18n::Localizer::languageToString(next));
                     configManager.setLanguage(i18n::Localizer::languageToString(next));
                     configManager.saveToFile("data/config.conf");
@@ -142,6 +152,10 @@ private:
             ui::TUIAction action = tui.getAction();
             if (action == ui::TUIAction::QUIT) {
                 return;
+            } else if (action == ui::TUIAction::HELP) {
+                tui.showHelpScreen();
+            } else if (action == ui::TUIAction::ABOUT) {
+                tui.showAboutScreen();
             } else if (action == ui::TUIAction::RESTART) {
                 setupRandomizer();
                 run();
@@ -189,10 +203,6 @@ private:
                 done = true;
             } else if (lower == "list") {
                 editList(setupUI);
-            } else if (lower == "mode" || lower == "mode all" || lower == "mode_all") {
-                configManager.setMode(config::PickMode::ALL_RANDOM);
-            } else if (lower == "mode one" || lower == "mode_one" || lower == "mode one by one") {
-                configManager.setMode(config::PickMode::ONE_BY_ONE);
             }
         }
 

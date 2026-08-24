@@ -92,6 +92,14 @@
         <translation>下一位已可见</translation>
     </message>
     <message>
+        <source>Next person preview shown.</source>
+        <translation>已显示下一位预览。</translation>
+    </message>
+    <message>
+        <source>Next person preview hidden.</source>
+        <translation>已隐藏下一位预览。</translation>
+    </message>
+    <message>
         <source>Mode changed to All Random</source>
         <translation>模式已切换为全局随机</translation>
     </message>
@@ -137,6 +145,10 @@
     <message>
         <source>Hide Next Person</source>
         <translation>隐藏下一位</translation>
+    </message>
+    <message>
+        <source>Show Next Person Preview</source>
+        <translation>显示下一位预览</translation>
     </message>
     <message>
         <source>All Random</source>
@@ -338,6 +350,70 @@
         <translation>命令: next(n) quit(q) hide(h) all one lang(l) restart(r) help(?)</translation>
     </message>
     <message>
+        <source>TUI_HELP_TITLE</source>
+        <translation>帮助</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_NEXT</source>
+        <translation>下一位</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_HIDE</source>
+        <translation>显示/隐藏下一位名字</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_MODE</source>
+        <translation>切换模式（all=全部覆盖 / one=逐个）</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_LANG</source>
+        <translation>切换语言（lang zh / lang en）</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_RESTART</source>
+        <translation>重新开始</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_SETUP</source>
+        <translation>进入配置</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_QUIT</source>
+        <translation>退出程序</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_HELP</source>
+        <translation>显示本帮助</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_BACK</source>
+        <translation>按回车返回...</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_SHELL</source>
+        <translation>执行系统命令</translation>
+    </message>
+    <message>
+        <source>TUI_HELP_ABOUT</source>
+        <translation>显示关于</translation>
+    </message>
+    <message>
+        <source>ABOUT_TITLE</source>
+        <translation>关于</translation>
+    </message>
+    <message>
+        <source>ABOUT_PROJECT</source>
+        <translation>随机点名程序 v</translation>
+    </message>
+    <message>
+        <source>ABOUT_DESC</source>
+        <translation>用于课堂的随机点名程序。</translation>
+    </message>
+    <message>
+        <source>ABOUT_AUTHOR</source>
+        <translation>版权所有 © 2025 Jianyin Li</translation>
+    </message>
+    <message>
         <source>TUI_DONE</source>
         <translation>所有人员已点名完毕！</translation>
     </message>
@@ -367,7 +443,7 @@
     </message>
     <message>
         <source>SETUP_HINT_SAVE</source>
-        <translation>输入&apos;mode&apos;更改模式，&apos;save&apos;保存退出，&apos;exit&apos;退出</translation>
+        <translation>输入&apos;save&apos;保存并退出，&apos;exit&apos;退出</translation>
     </message>
     <message>
         <source>SETUP_HINT_ADD</source>

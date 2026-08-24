@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timeLabel(new QLabel(this)),
     nextPreviewLabel(new QLabel(this)),
     currentIndex(0),
-    hideNextPerson(false),
+    showNextPreview(true),
     allDone(false),
     pickMode(1)
 {
@@ -37,8 +37,6 @@ MainWindow::MainWindow(QWidget *parent) :
     nextPreviewLabel->setStyleSheet("color: rgba(255,255,255,0.7); font-size: 13px; padding: 2px;");
     int idx = ui->verticalLayout->indexOf(ui->bottomLine);
     ui->verticalLayout->insertWidget(idx, nextPreviewLabel);
-
-    ui->action_hidenp->setCheckable(true);
 
     setStyleSheet(R"(
         QMainWindow {
@@ -141,7 +139,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->ButtonNext, &QPushButton::clicked, this, &MainWindow::onNextButtonClicked);
     QObject::connect(timer, &QTimer::timeout, this, &MainWindow::onTimerTimeout);
     QObject::connect(ui->actionExit, &QAction::triggered, this, &MainWindow::onExitActionTriggered);
-    QObject::connect(ui->action_hidenp, &QAction::triggered, this, &MainWindow::onHideNextActionTriggered);
+    QObject::connect(ui->action_nextprev, &QAction::triggered, this, &MainWindow::onShowNextPreviewActionTriggered);
     QObject::connect(ui->action_m_all, &QAction::triggered, this, &MainWindow::onAllRandomActionTriggered);
     QObject::connect(ui->action_per, &QAction::triggered, this, &MainWindow::onOneByOneActionTriggered);
     QObject::connect(ui->action_restart, &QAction::triggered, this, &MainWindow::onRestartActionTriggered);
@@ -177,7 +175,6 @@ void MainWindow::retranslateStrings()
     ui->menu_lang->setTitle(tr("Language"));
     ui->menu_about->setTitle(tr("About"));
 
-    ui->action_hidenp->setText(tr("Hide Next Person"));
     ui->action_m_all->setText(tr("All Random"));
     ui->action_per->setText(tr("One by One"));
     ui->action_restart->setText(tr("Restart"));
@@ -319,14 +316,14 @@ void MainWindow::onExitActionTriggered()
     close();
 }
 
-void MainWindow::onHideNextActionTriggered()
+void MainWindow::onShowNextPreviewActionTriggered()
 {
-    hideNextPerson = !hideNextPerson;
-    ui->action_hidenp->setChecked(hideNextPerson);
-    updateUI();
-    showStatus(hideNextPerson
-        ? tr("Names will be hidden on pick. Toggle off to reveal.")
-        : tr("Names will be shown on pick."));
+    showNextPreview = !showNextPreview;
+    ui->action_nextprev->setChecked(showNextPreview);
+    nextPreviewLabel->setVisible(showNextPreview);
+    showStatus(showNextPreview
+        ? tr("Next person preview shown.")
+        : tr("Next person preview hidden."));
 }
 
 void MainWindow::onAllRandomActionTriggered()
@@ -375,11 +372,7 @@ void MainWindow::updateUI()
         size_t nextIdx = currentIndex + 1;
         if (nextIdx < randomIndices.size()) {
             QString nextName = QString::fromStdString(names[randomIndices[nextIdx]]);
-            if (hideNextPerson) {
-                nextPreviewLabel->setText(tr("Next: *** Hidden ***"));
-            } else {
-                nextPreviewLabel->setText(tr("Next: %1").arg(nextName));
-            }
+            nextPreviewLabel->setText(tr("Next: %1").arg(nextName));
         } else {
             nextPreviewLabel->setText(tr("Next: ---"));
         }
